@@ -13,4 +13,3 @@
 
 
 // reference additional headers your program requires here
-#pragma comment(lib,"opengl32.lib")

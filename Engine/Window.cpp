@@ -2,10 +2,12 @@
 
 #include <gl/glew.h>
 #include "Window.h"
+#include "test/test.h"
 
 
 Window::Window() {
 	std::cout << "Window();" << std::endl;
+	test();
 }
 
 
@@ -29,6 +31,7 @@ void Window::create() {
 		std::cout << "GLEW Error: " << glewGetErrorString(err) << std::endl;
 		exit(1);
 	}
+	
 }
 
 void Window::show() {

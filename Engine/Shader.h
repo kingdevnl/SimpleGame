@@ -10,9 +10,6 @@ private:
 	int programID, vertexID, fragmentID;
 
 
-	GLuint getUniform(const char* uniform) {
-		return glGetUniformLocation(programID, uniform);
-	}
 
 
 public:
@@ -20,6 +17,10 @@ public:
 		: vertexCode(vertex_code),
 		  fragmentCode(fragment_code) {}
 
+	GLuint getUniform(const char* uniform) {
+		return glGetUniformLocation(programID, uniform);
+
+	}
 
 	void setup();
 	void bind();

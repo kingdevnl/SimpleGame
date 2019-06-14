@@ -9,9 +9,12 @@
 #include <experimental/filesystem>
 #include <Windows.h>
 #include <cassert>
-
-
+#include "test/test.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl2.h"
 int main() {
+
 
 
 	std::cout << "Setting up\n";
@@ -19,8 +22,16 @@ int main() {
 	Window window = Window();
 
 	window.create();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	ImGui::StyleColorsDark();
+
+	ImGui_ImplGlfw_InitForOpenGL(window.window, true);
+	ImGui_ImplOpenGL2_Init();
 
 	window.show();
+
+
 
 
 	Shader myShader = Shader::load("./shaders/shader.vs", "./shaders/shader.fs");
@@ -39,18 +50,12 @@ int main() {
 	};
 
 	std::vector<unsigned int> indices = {
-		0,
-		1,
-		2
+		0, 1, 2
 	};
 	Mesh mesh(positions, indices);
 
 	myShader.bind();
 
-	GLint loc = glGetUniformLocation(myShader.getProgramID(), "u_Color");
-	glUniform4f(loc, 0.2f, 0.3f, 0.8f, 1.0f);
-
-	loc = glGetUniformLocation(myShader.getProgramID(), "u_Scale");
 
 	float scale = 1;
 	
@@ -61,20 +66,26 @@ int main() {
 	while (!window.isCloseRequested()) {
 		window.clear();
 
+
 		myShader.bind();
 		mesh.draw();
+		myShader.unbind();
 
-	
+
+		ImGui_ImplGlfw_NewFrame();
+		ImGui_ImplOpenGL2_NewFrame();
+
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow((bool*)true);
+		ImGui::EndFrame();
+
+		ImGui::Render();
+		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 		window.update();
 
-		if(GetAsyncKeyState(VK_UP)) {
-			scale+=.2;
-		}
-		if(GetAsyncKeyState(VK_DOWN)) {
-			scale-=.2;
-		}
-		glUniform1f(loc, scale);
+		
+		
 	}
 	mesh.destroy();
 	myShader.unbind();
