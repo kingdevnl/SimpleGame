@@ -11,6 +11,8 @@
 #include <cassert>
 
 #include "HUD.h"
+#include "../Engine/Texture.h"
+
 int main() {
 
 	HUD hud = HUD();
@@ -21,13 +23,13 @@ int main() {
 
 	window.create();
 	hud.setupHUD(window.window);
-		
+
 	window.show();
 
+	Texture brickTexture("./textures/brick.png");
 
 
-
-	Shader myShader = Shader::load("./shaders/shader.vs", "./shaders/shader.fs");
+	Shader myShader = Shader::load("./shaders/vertex.fs", "./shaders/fragment.fs");
 
 	myShader.setup();
 
@@ -39,19 +41,27 @@ int main() {
 	std::vector<float> positions = {
 		-1, -1, 0,
 		1, -1, 0,
-		0, 1, 0
+		0, 1, 0,
+
+
 	};
 
 	std::vector<unsigned int> indices = {
 		0, 1, 2
 	};
-	Mesh mesh(positions, indices);
+	std::vector<float> textCoords = {
+		0, 0,
+		0, 1,
+		1, 0
+	};
+
+	
+	Mesh mesh(positions, indices, textCoords, &brickTexture);
 
 	myShader.bind();
-
-
-	float scale = 1;
-	
+	GLuint loc = glGetUniformLocation(myShader.getProgramID(), "texture_sampler");
+	std::cout << "loc: " << loc << std::endl;
+	glUniform1i(loc, 0);
 
 	myShader.unbind();
 
@@ -64,14 +74,15 @@ int main() {
 		mesh.draw();
 		myShader.unbind();
 		hud.drawHUD();
-	
+
 
 		window.update();
 
-		
-		
+
 	}
+
 	mesh.destroy();
+	brickTexture.destory();
 	myShader.unbind();
 	myShader.destroy();
 

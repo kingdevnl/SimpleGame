@@ -34,7 +34,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaders\shader.vs" />
-    <None Include="shaders\shader.fs" />
+    <None Include="shaders\vertex.fs" />
+    <None Include="shaders\fragment.fs" />
   </ItemGroup>
 </Project>
