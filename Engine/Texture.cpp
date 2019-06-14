@@ -11,20 +11,15 @@ Texture::Texture(const char* file) {
 		exit(1);
 	}
 
-	
 
-	std::cout << bpp;
-	
+	std::cout << "type: " << bpp << std::endl;
+
 
 	glBindTexture(GL_TEXTURE_2D, textureID);
 
-	if(bpp == 3) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, rgb);
-	} else if(bpp = 4) {
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgb);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgb);
 
-	}
-	
+
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 
