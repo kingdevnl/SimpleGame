@@ -9,26 +9,19 @@
 #include <experimental/filesystem>
 #include <Windows.h>
 #include <cassert>
-#include "test/test.h"
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_glfw.h"
-#include "imgui/imgui_impl_opengl2.h"
+
+#include "HUD.h"
 int main() {
 
-
+	HUD hud = HUD();
 
 	std::cout << "Setting up\n";
 
 	Window window = Window();
 
 	window.create();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	ImGui::StyleColorsDark();
-
-	ImGui_ImplGlfw_InitForOpenGL(window.window, true);
-	ImGui_ImplOpenGL2_Init();
-
+	hud.setupHUD(window.window);
+		
 	window.show();
 
 
@@ -70,17 +63,8 @@ int main() {
 		myShader.bind();
 		mesh.draw();
 		myShader.unbind();
-
-
-		ImGui_ImplGlfw_NewFrame();
-		ImGui_ImplOpenGL2_NewFrame();
-
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow((bool*)true);
-		ImGui::EndFrame();
-
-		ImGui::Render();
-		ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+		hud.drawHUD();
+	
 
 		window.update();
 
