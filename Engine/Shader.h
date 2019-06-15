@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <gl/glew.h>
+#include <glm/glm.hpp>
 
 class Shader {
 private:
@@ -10,8 +11,6 @@ private:
 	int programID, vertexID, fragmentID;
 
 
-
-
 public:
 	Shader(const std::string& vertex_code, const std::string& fragment_code)
 		: vertexCode(vertex_code),
@@ -19,33 +18,27 @@ public:
 
 	GLuint getUniform(const char* uniform) {
 		return glGetUniformLocation(programID, uniform);
-
 	}
 
 	void setup();
 	void bind();
 
-	void setUniform1f(const char* name, float obj) {
-		GLuint loc = getUniform(name);
-
-		glUniform1f(loc, obj);
+	inline void setUniform1f(const char* name, float val) {
+		glUniform1f(getUniform(name), val);
 	}
-	void setUniform3f(const char* name, float x, float y, float z) {
-		GLuint loc = getUniform(name);
 
-		glUniform3f(loc, x, y, z);
+	inline void setUniformMat4f(const char* name, glm::mat4 matrix) {
+		glUniformMatrix4fv(getUniform(name), 1, GL_FALSE, &matrix[0][0]);
 	}
-	void setUniform4f(const char* name, float x, float y, float z, float a) {
-		GLuint loc = getUniform(name);
 
-		glUniform4f(loc, x, y, z, a);
-	}
 	void unbind();
 	void destroy();
 
 	int getProgramID() {
 		return programID;
 	}
+
+	
 
 	static Shader load(const char* vertexPath, const char* fragmentPath);
 };

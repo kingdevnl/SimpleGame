@@ -8,12 +8,14 @@
 #include "../Engine/Window.h"
 #include <experimental/filesystem>
 #include <Windows.h>
-#include <cassert>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "HUD.h"
 #include "../Engine/Texture.h"
 
 int main() {
+
 
 	HUD hud = HUD();
 
@@ -26,10 +28,10 @@ int main() {
 
 	window.show();
 
-	Texture brickTexture("./textures/brick.png");
+	Texture brickTexture("./res/textures/brick.png");
 
 
-	Shader myShader = Shader::load("./shaders/vertex.fs", "./shaders/fragment.fs");
+	Shader myShader = Shader::load("./res/shaders/vertex.fs", "./res/shaders/fragment.fs");
 
 	myShader.setup();
 
@@ -56,13 +58,16 @@ int main() {
 		0, 0
 	};
 
-	
+	glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
+
 	Mesh mesh(positions, indices, textCoords, &brickTexture);
 
+
 	myShader.bind();
-	GLuint loc = glGetUniformLocation(myShader.getProgramID(), "texture_sampler");
-	std::cout << "loc: " << loc << std::endl;
-	glUniform1i(loc, 0);
+	myShader.setUniform1f("texture_sampler", 0);
+	myShader.setUniformMat4f("MVP", proj);
+
 
 	myShader.unbind();
 
